@@ -11,28 +11,28 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --tg-bg: var(--tg-theme-bg-color, #0f1117);
-  --tg-secondary: var(--tg-theme-secondary-bg-color, #1a1f2e);
-  --tg-text: var(--tg-theme-text-color, #e8eaf0);
-  --tg-hint: var(--tg-theme-hint-color, #6b7280);
-  --tg-link: var(--tg-theme-link-color, #d4a84b);
-  --tg-button: var(--tg-theme-button-color, #d4a84b);
-  --tg-button-text: var(--tg-theme-button-text-color, #000);
-
-  --gold: #d4a84b;
-  --gold-light: #f0c96d;
-  --gold-dim: rgba(212,168,75,0.12);
-  --border: rgba(255,255,255,0.07);
-  --success: #34d399;
-  --danger: #f87171;
-  --radius: 14px;
+  --bg:        #0d1117;
+  --surface:   #161b27;
+  --surface2:  #1c2333;
+  --border:    rgba(255,255,255,0.08);
+  --border2:   rgba(255,255,255,0.04);
+  --gold:      #e6a817;
+  --gold-light:#f5c24a;
+  --gold-dim:  rgba(230,168,23,0.11);
+  --gold-mid:  rgba(230,168,23,0.22);
+  --text:      #f0f2f5;
+  --text-sec:  #9ba3b0;
+  --text-dim:  #5a6270;
+  --success:   #3ecf8e;
+  --danger:    #f06a6a;
+  --radius:    14px;
   --radius-sm: 10px;
 }
 
 html, body {
   height: 100%;
-  background: var(--tg-bg);
-  color: var(--tg-text);
+  background: var(--bg);
+  color: var(--text);
   font-family: 'Syne', sans-serif;
   overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
@@ -45,202 +45,78 @@ body {
   min-height: -webkit-fill-available;
 }
 
-/* ─── HEADER ─── */
+/* ── HEADER ── */
 .app-header {
-  padding: 16px 20px 12px;
+  padding: 14px 18px 13px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
   border-bottom: 1px solid var(--border);
-  background: var(--tg-bg);
+  background: var(--bg);
   position: sticky;
   top: 0;
   z-index: 10;
 }
-.app-icon {
-  width: 38px; height: 38px;
+
+.header-icon {
+  width: 36px; height: 36px;
   background: var(--gold-dim);
-  border: 1px solid rgba(212,168,75,0.3);
-  border-radius: 10px;
+  border: 1px solid var(--gold-mid);
+  border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
   flex-shrink: 0;
 }
-.app-title-wrap { flex: 1; min-width: 0; }
-.app-title {
-  font-size: 15px; font-weight: 800;
+.header-icon svg { width: 17px; height: 17px; stroke: var(--gold); }
+
+.header-text { flex: 1; min-width: 0; }
+.header-title {
+  font-size: 15px;
+  font-weight: 800;
   letter-spacing: -0.01em;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--text);
+  line-height: 1.2;
 }
-.app-subtitle {
+.header-sub {
   font-size: 11px;
-  color: var(--tg-hint);
+  color: var(--text-dim);
   font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
+  margin-top: 1px;
 }
-.header-badge {
+
+.header-tag {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
-  padding: 3px 8px;
+  padding: 3px 9px;
   background: var(--gold-dim);
-  border: 1px solid rgba(212,168,75,0.25);
+  border: 1px solid var(--gold-mid);
   border-radius: 20px;
   color: var(--gold);
   letter-spacing: 0.06em;
   white-space: nowrap;
 }
 
-/* ─── CONTENT ─── */
+/* ── CONTENT ── */
 .content {
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 16px 16px 120px;
+  padding: 14px 14px 110px;
   scrollbar-width: none;
 }
 .content::-webkit-scrollbar { display: none; }
 
-/* ─── SECTION ─── */
-.section {
-  margin-bottom: 12px;
-  background: var(--tg-secondary);
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-.section-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--tg-hint);
-  padding: 12px 16px 6px;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-/* ─── FIELD ROW ─── */
-.field-row {
-  display: flex;
-  align-items: center;
-  padding: 0;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  transition: background 0.15s;
-}
-.field-row:last-child { border-bottom: none; }
-.field-row:active { background: rgba(255,255,255,0.03); }
-
-.field-icon {
-  width: 40px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-  color: var(--gold);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.field-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 10px 0;
-  min-width: 0;
-}
-.field-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--tg-text);
-  line-height: 1.2;
-}
-.field-hint {
-  font-size: 11px;
-  color: var(--tg-hint);
-  font-family: 'JetBrains Mono', monospace;
-  margin-top: 2px;
-}
-
-.field-input-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-right: 4px;
-}
-
-input[type="number"] {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--tg-text);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 8px 10px;
-  width: 110px;
-  text-align: right;
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-input[type="number"]:focus {
-  border-color: rgba(212,168,75,0.5);
-  box-shadow: 0 0 0 3px rgba(212,168,75,0.1);
-  background: rgba(212,168,75,0.05);
-}
-input[type="number"]::placeholder { color: rgba(255,255,255,0.2); }
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
-
-.calc-btn {
-  width: 32px; height: 32px;
-  background: var(--gold-dim);
-  border: 1px solid rgba(212,168,75,0.3);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: background 0.2s, transform 0.1s;
-  color: var(--gold);
-}
-.calc-btn:active { transform: scale(0.9); background: rgba(212,168,75,0.25); }
-.calc-btn svg { width: 14px; height: 14px; }
-
-/* ─── SELECT ROW ─── */
-select {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--tg-text);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  padding: 8px 28px 8px 10px;
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4a84b' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  min-width: 130px;
-}
-select option { background: #1a2035; }
-
-/* ─── RESULT CARD ─── */
+/* ── RESULT CARD ── */
 .result-section {
   margin-bottom: 12px;
-  border-radius: var(--radius);
-  overflow: hidden;
   display: none;
-  animation: slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+  animation: slideUp 0.32s cubic-bezier(0.34,1.56,0.64,1) both;
 }
 .result-section.visible { display: block; }
 
 .result-card {
-  background: linear-gradient(135deg, rgba(212,168,75,0.15) 0%, rgba(212,168,75,0.05) 100%);
-  border: 1px solid rgba(212,168,75,0.3);
+  background: var(--surface);
+  border: 1px solid rgba(230,168,23,0.25);
   border-radius: var(--radius);
   padding: 20px;
   position: relative;
@@ -251,41 +127,42 @@ select option { background: #1a2035; }
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+  opacity: 0.5;
 }
-.result-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-}
+
 .result-label-sm {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--gold);
   font-family: 'JetBrains Mono', monospace;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 .result-amount {
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: #fff;
+  color: var(--text);
   line-height: 1;
+  margin-bottom: 18px;
+}
+.result-currency {
+  font-size: 18px;
+  color: var(--text-sec);
+  margin-right: 4px;
 }
 
 .result-stats {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 8px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255,255,255,0.08);
 }
 .stat-item {
-  background: rgba(0,0,0,0.2);
-  border-radius: 8px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border2);
+  border-radius: 9px;
   padding: 10px 8px;
   text-align: center;
 }
@@ -293,27 +170,160 @@ select option { background: #1a2035; }
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   font-weight: 500;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .stat-label {
   font-size: 9px;
-  color: var(--tg-hint);
-  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   font-family: 'JetBrains Mono', monospace;
 }
-.c-gold { color: var(--gold-light); }
-.c-red  { color: var(--danger); }
-.c-green{ color: var(--success); }
+.c-gold  { color: var(--gold-light); }
+.c-red   { color: var(--danger); }
+.c-green { color: var(--success); }
 
-/* ─── SCHEDULE ─── */
+/* ── SECTION BLOCK ── */
+.section {
+  margin-bottom: 10px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  animation: slideUp 0.3s ease both;
+}
+.section:nth-child(2) { animation-delay: 0.04s; }
+.section:nth-child(3) { animation-delay: 0.08s; }
+
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 12px 16px 8px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── FIELD ROW ── */
+.field-row {
+  display: flex;
+  align-items: center;
+  padding: 0 12px 0 0;
+  border-bottom: 1px solid var(--border2);
+  transition: background 0.15s;
+}
+.field-row:last-child { border-bottom: none; }
+
+.field-icon-col {
+  width: 44px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  padding: 14px 0;
+}
+.field-icon-box {
+  width: 28px; height: 28px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+}
+.field-icon-box svg { width: 13px; height: 13px; stroke: var(--text-sec); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+
+.field-body {
+  flex: 1;
+  padding: 12px 10px 12px 4px;
+  min-width: 0;
+}
+.field-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+.field-hint {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.03em;
+}
+
+.field-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+input[type="number"] {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 9px 10px;
+  width: 108px;
+  text-align: right;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+input[type="number"]:focus {
+  border-color: rgba(230,168,23,0.55);
+  background: rgba(230,168,23,0.05);
+  box-shadow: 0 0 0 3px rgba(230,168,23,0.09);
+}
+input[type="number"]::placeholder { color: var(--text-dim); }
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+.calc-btn {
+  width: 30px; height: 30px;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold-mid);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.1s;
+}
+.calc-btn:active { transform: scale(0.88); background: rgba(230,168,23,0.3); }
+.calc-btn svg { width: 13px; height: 13px; stroke: var(--gold); fill: none; stroke-linecap: round; stroke-width: 2.2; }
+
+/* ── SELECT ── */
+select {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 9px 26px 9px 10px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23e6a817' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  min-width: 140px;
+  transition: border-color 0.2s;
+}
+select:focus { border-color: rgba(230,168,23,0.5); outline: none; }
+select option { background: #1c2333; color: #f0f2f5; }
+
+/* ── SCHEDULE ── */
 .schedule-section {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: none;
-  animation: slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1) 0.05s both;
+  animation: slideUp 0.32s cubic-bezier(0.34,1.56,0.64,1) 0.05s both;
 }
 .schedule-section.visible { display: block; }
 
@@ -322,177 +332,165 @@ select option { background: #1a2035; }
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  background: var(--tg-secondary);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
-  transition: background 0.15s;
   user-select: none;
   -webkit-user-select: none;
+  transition: background 0.15s;
 }
-.schedule-toggle:active { background: rgba(255,255,255,0.05); }
-.schedule-toggle-left {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 14px; font-weight: 600;
+.schedule-toggle:active { background: var(--surface2); }
+.schedule-toggle-left { display: flex; align-items: center; gap: 10px; }
+.sched-icon {
+  width: 28px; height: 28px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
 }
-.schedule-toggle-left span { font-size: 18px; }
-.schedule-chevron {
-  color: var(--tg-hint);
-  transition: transform 0.3s;
-  font-size: 12px;
-}
-.schedule-chevron.open { transform: rotate(180deg); }
+.sched-icon svg { width: 13px; height: 13px; stroke: var(--text-sec); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+.schedule-toggle-text { font-size: 14px; font-weight: 700; color: var(--text); }
+
+.sched-chevron { display: flex; align-items: center; transition: transform 0.25s; }
+.sched-chevron svg { width: 14px; height: 14px; stroke: var(--text-dim); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+.sched-chevron.open { transform: rotate(180deg); }
 
 .schedule-table-wrap {
-  margin-top: 8px;
-  background: var(--tg-secondary);
+  margin-top: 6px;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  max-height: 300px;
+  max-height: 280px;
   overflow-y: auto;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
   display: none;
 }
-.schedule-table-wrap::-webkit-scrollbar { display: none; }
+.schedule-table-wrap::-webkit-scrollbar { width: 4px; }
+.schedule-table-wrap::-webkit-scrollbar-track { background: transparent; }
+.schedule-table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 .schedule-table-wrap.open { display: block; }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-}
-thead {
-  position: sticky; top: 0;
-  background: rgba(0,0,0,0.3);
-  z-index: 1;
-}
+table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; }
+thead { position: sticky; top: 0; z-index: 1; background: var(--surface2); }
 th {
-  padding: 9px 10px;
+  padding: 9px 11px;
   text-align: right;
   font-size: 9px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--tg-hint);
+  color: var(--text-dim);
   border-bottom: 1px solid var(--border);
   font-family: 'Syne', sans-serif;
   font-weight: 700;
 }
-th:first-child { text-align: center; }
-tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); }
+th:first-child { text-align: center; width: 32px; }
+tbody tr { border-bottom: 1px solid var(--border2); }
 tbody tr:last-child { border-bottom: none; }
-td {
-  padding: 9px 10px;
-  text-align: right;
-  font-size: 11px;
-  color: var(--tg-text);
-}
-td:first-child { text-align: center; color: var(--tg-hint); font-size: 10px; }
+tbody tr:nth-child(even) { background: rgba(255,255,255,0.015); }
+td { padding: 9px 11px; text-align: right; font-size: 11px; color: var(--text); }
+td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
 
-/* ─── ERROR ─── */
+/* ── ERROR ── */
 .error-toast {
   display: none;
-  margin-bottom: 12px;
-  padding: 12px 16px;
-  background: rgba(248,113,113,0.1);
-  border: 1px solid rgba(248,113,113,0.25);
+  margin-bottom: 10px;
+  padding: 11px 14px;
+  background: rgba(240,106,106,0.1);
+  border: 1px solid rgba(240,106,106,0.22);
   border-radius: var(--radius-sm);
   font-size: 13px;
   color: var(--danger);
   font-family: 'JetBrains Mono', monospace;
-  animation: slideUp 0.3s ease both;
+  animation: slideUp 0.25s ease both;
+  gap: 8px;
+  align-items: flex-start;
+  line-height: 1.4;
 }
-.error-toast.visible { display: flex; align-items: center; gap: 8px; }
+.error-toast.visible { display: flex; }
+.error-icon { flex-shrink: 0; margin-top: 1px; }
+.error-icon svg { width: 14px; height: 14px; stroke: var(--danger); fill: none; stroke-linecap: round; stroke-width: 2; }
 
-/* ─── BOTTOM ACTION ─── */
+/* ── BOTTOM BAR ── */
 .bottom-bar {
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  padding: 12px 16px;
-  padding-bottom: calc(12px + env(safe-area-inset-bottom));
-  background: linear-gradient(to top, var(--tg-bg) 70%, transparent);
-  display: flex; gap: 10px;
+  padding: 10px 14px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 65%, transparent);
+  display: flex;
+  gap: 9px;
   z-index: 20;
 }
 .btn-primary {
   flex: 1;
   background: var(--gold);
-  color: #000;
+  color: #0d1117;
   border: none;
   border-radius: var(--radius);
-  padding: 16px;
+  padding: 15px;
   font-family: 'Syne', sans-serif;
   font-size: 15px;
   font-weight: 800;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: transform 0.1s, opacity 0.2s;
-  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s, opacity 0.15s;
 }
 .btn-primary:active { transform: scale(0.97); opacity: 0.85; }
 .btn-secondary {
-  background: rgba(255,255,255,0.07);
-  color: var(--tg-hint);
+  background: var(--surface);
+  color: var(--text-sec);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px 18px;
+  padding: 15px 18px;
   font-family: 'Syne', sans-serif;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.1s, background 0.2s;
+  transition: transform 0.1s, background 0.15s;
   white-space: nowrap;
 }
-.btn-secondary:active { transform: scale(0.97); background: rgba(255,255,255,0.1); }
+.btn-secondary:active { transform: scale(0.97); background: var(--surface2); }
 
-/* ─── ANIMATIONS ─── */
+/* ── ANIMATIONS ── */
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Field row animation */
-.section .field-row { animation: fadeIn 0.3s ease both; }
-.section .field-row:nth-child(2) { animation-delay: 0.05s; }
-.section .field-row:nth-child(3) { animation-delay: 0.1s; }
-.section .field-row:nth-child(4) { animation-delay: 0.15s; }
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateX(-8px); }
-  to   { opacity: 1; transform: translateX(0); }
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="app-header">
-  <div class="app-icon">💰</div>
-  <div class="app-title-wrap">
-    <div class="app-title">Кредитный Калькулятор</div>
-    <div class="app-subtitle">quarterly · loan · calculator</div>
+  <div class="header-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="5" width="20" height="14" rx="2"/>
+      <path d="M2 10h20"/>
+    </svg>
   </div>
-  <div class="header-badge">v1.0</div>
+  <div class="header-text">
+    <div class="header-title">Кредитный Калькулятор</div>
+    <div class="header-sub">quarterly · loan · calculator</div>
+  </div>
+  <div class="header-tag">THB</div>
 </div>
 
-<!-- SCROLLABLE CONTENT -->
 <div class="content">
 
-  <!-- ERROR -->
   <div class="error-toast" id="errorToast">
-    <span>⚠</span>
+    <span class="error-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+    </span>
     <span id="errorText"></span>
   </div>
 
-  <!-- RESULT -->
   <div class="result-section" id="resultSection">
     <div class="result-card">
-      <div class="result-top">
-        <div>
-          <div class="result-label-sm" id="resultLabel">Квартальный платёж</div>
-          <div class="result-amount" id="resultAmount">—</div>
-        </div>
-        <div style="font-size:28px">📊</div>
+      <div class="result-label-sm" id="resultLabel">Квартальный платёж</div>
+      <div class="result-amount">
+        <span class="result-currency" id="resultPrefix">THB </span><span id="resultValue">—</span>
       </div>
       <div class="result-stats">
         <div class="stat-item">
@@ -511,88 +509,95 @@ td:first-child { text-align: center; color: var(--tg-hint); font-size: 10px; }
     </div>
   </div>
 
-  <!-- FIELDS SECTION -->
   <div class="section">
     <div class="section-label">Параметры кредита</div>
 
-    <!-- Loan Amount -->
     <div class="field-row">
-      <div class="field-icon">$</div>
+      <div class="field-icon-col">
+        <div class="field-icon-box">
+          <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+      </div>
       <div class="field-body">
         <div class="field-name">Сумма кредита</div>
-        <div class="field-hint">Principal amount</div>
+        <div class="field-hint">principal amount · THB</div>
       </div>
-      <div class="field-input-wrap">
-        <input type="number" id="loanAmount" placeholder="100000" inputmode="decimal">
-        <button class="calc-btn" onclick="solve('amount')" title="Рассчитать">
-          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <path d="M7 1v12M1 7h12"/>
-          </svg>
+      <div class="field-controls">
+        <input type="number" id="loanAmount" placeholder="1000000" inputmode="decimal">
+        <button class="calc-btn" onclick="solve('amount')">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </div>
     </div>
 
-    <!-- Quarters -->
     <div class="field-row">
-      <div class="field-icon">#</div>
+      <div class="field-icon-col">
+        <div class="field-icon-box">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+      </div>
       <div class="field-body">
-        <div class="field-name">Кварталов</div>
-        <div class="field-hint">Number of quarters</div>
+        <div class="field-name">Количество кварталов</div>
+        <div class="field-hint">number of quarters</div>
       </div>
-      <div class="field-input-wrap">
+      <div class="field-controls">
         <input type="number" id="quarters" placeholder="20" inputmode="numeric">
-        <button class="calc-btn" onclick="solve('quarters')" title="Рассчитать">
-          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <path d="M7 1v12M1 7h12"/>
-          </svg>
+        <button class="calc-btn" onclick="solve('quarters')">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </div>
     </div>
 
-    <!-- Rate -->
     <div class="field-row">
-      <div class="field-icon">%</div>
+      <div class="field-icon-col">
+        <div class="field-icon-box">
+          <svg viewBox="0 0 24 24"><path d="M19 5L5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+        </div>
+      </div>
       <div class="field-body">
         <div class="field-name">Годовая ставка</div>
-        <div class="field-hint">Annual interest rate</div>
+        <div class="field-hint">annual interest rate · %</div>
       </div>
-      <div class="field-input-wrap">
-        <input type="number" id="rate" placeholder="7.5" inputmode="decimal">
-        <button class="calc-btn" onclick="solve('rate')" title="Рассчитать">
-          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <path d="M7 1v12M1 7h12"/>
-          </svg>
+      <div class="field-controls">
+        <input type="number" id="rate" placeholder="7.50" inputmode="decimal">
+        <button class="calc-btn" onclick="solve('rate')">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </div>
     </div>
 
-    <!-- Quarterly Payment -->
     <div class="field-row">
-      <div class="field-icon">↩</div>
+      <div class="field-icon-col">
+        <div class="field-icon-box">
+          <svg viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </div>
+      </div>
       <div class="field-body">
         <div class="field-name">Квартальный платёж</div>
-        <div class="field-hint">Principal & interest</div>
+        <div class="field-hint">principal + interest · THB</div>
       </div>
-      <div class="field-input-wrap">
-        <input type="number" id="payment" placeholder="1560" inputmode="decimal">
-        <button class="calc-btn" onclick="solve('payment')" title="Рассчитать">
-          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <path d="M7 1v12M1 7h12"/>
-          </svg>
+      <div class="field-controls">
+        <input type="number" id="payment" placeholder="15600" inputmode="decimal">
+        <button class="calc-btn" onclick="solve('payment')">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- COMPOUNDING SECTION -->
   <div class="section">
     <div class="section-label">Начисление процентов</div>
     <div class="field-row">
-      <div class="field-icon">🔄</div>
+      <div class="field-icon-col">
+        <div class="field-icon-box">
+          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-6.219-8.56"/><path d="M21 3v5h-5"/></svg>
+        </div>
+      </div>
       <div class="field-body">
         <div class="field-name">Периодичность</div>
+        <div class="field-hint">compounding frequency</div>
       </div>
-      <div class="field-input-wrap">
+      <div class="field-controls">
         <select id="compounding">
           <option value="daily">Ежедневно</option>
           <option value="monthly">Ежемесячно</option>
@@ -604,14 +609,17 @@ td:first-child { text-align: center; color: var(--tg-hint); font-size: 10px; }
     </div>
   </div>
 
-  <!-- SCHEDULE SECTION -->
   <div class="schedule-section" id="scheduleSection">
-    <div class="schedule-toggle" onclick="toggleSchedule()" id="schedToggle">
+    <div class="schedule-toggle" onclick="toggleSchedule()">
       <div class="schedule-toggle-left">
-        <span>📋</span>
-        <span style="font-size:14px;font-weight:700">График погашения</span>
+        <div class="sched-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 12h6M9 16h4"/></svg>
+        </div>
+        <span class="schedule-toggle-text">График погашения</span>
       </div>
-      <div class="schedule-chevron" id="schedChevron">▼</div>
+      <div class="sched-chevron" id="schedChevron">
+        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
     </div>
     <div class="schedule-table-wrap" id="schedTableWrap">
       <table>
@@ -619,8 +627,8 @@ td:first-child { text-align: center; color: var(--tg-hint); font-size: 10px; }
           <tr>
             <th>#</th>
             <th>Платёж</th>
-            <th>%</th>
-            <th>Долг</th>
+            <th>Проценты</th>
+            <th>Осн. долг</th>
             <th>Остаток</th>
           </tr>
         </thead>
@@ -629,24 +637,17 @@ td:first-child { text-align: center; color: var(--tg-hint); font-size: 10px; }
     </div>
   </div>
 
-</div><!-- /content -->
+</div>
 
-<!-- BOTTOM BAR -->
 <div class="bottom-bar">
   <button class="btn-secondary" onclick="clearAll()">Сброс</button>
-  <button class="btn-primary" onclick="autoSolve()">⚡ Рассчитать</button>
+  <button class="btn-primary" onclick="autoSolve()">Рассчитать</button>
 </div>
 
 <script>
-// ── Telegram Web App init ──
 const twa = window.Telegram?.WebApp;
-if (twa) {
-  twa.ready();
-  twa.expand();
-  twa.enableClosingConfirmation?.();
-}
+if (twa) { twa.ready(); twa.expand(); twa.enableClosingConfirmation?.(); }
 
-// ── Math ──
 function effectiveQuarterlyRate(annual, comp) {
   const r = annual / 100;
   switch (comp) {
@@ -659,47 +660,36 @@ function effectiveQuarterlyRate(annual, comp) {
   }
 }
 
-function fmtMoney(n) {
-  if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
-  if (Math.abs(n) >= 1e3) return '$' + (n/1e3).toFixed(1) + 'K';
-  return '$' + n.toLocaleString('ru-RU', {minimumFractionDigits:2, maximumFractionDigits:2});
+function fmtCompact(n) {
+  if (Math.abs(n) >= 1e6) return (n/1e6).toFixed(2) + 'M';
+  if (Math.abs(n) >= 1e3) return (n/1e3).toFixed(1) + 'K';
+  return n.toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
 }
 function fmtFull(n) {
-  return '$\u202F' + n.toLocaleString('ru-RU', {minimumFractionDigits:2, maximumFractionDigits:2});
+  return n.toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
 }
 
-// ── Error / haptic ──
+let errorTimer;
 function showError(msg) {
-  const t = document.getElementById('errorToast');
+  clearTimeout(errorTimer);
   document.getElementById('errorText').textContent = msg;
-  t.classList.add('visible');
+  document.getElementById('errorToast').classList.add('visible');
   twa?.HapticFeedback?.notificationOccurred('error');
-  setTimeout(() => t.classList.remove('visible'), 3500);
+  errorTimer = setTimeout(() => document.getElementById('errorToast').classList.remove('visible'), 3500);
 }
-function hideError() {
-  document.getElementById('errorToast').classList.remove('visible');
-}
+function hideError() { clearTimeout(errorTimer); document.getElementById('errorToast').classList.remove('visible'); }
 
-// ── Auto-solve (finds the missing field) ──
 function autoSolve() {
-  const P   = document.getElementById('loanAmount').value;
-  const n   = document.getElementById('quarters').value;
-  const r   = document.getElementById('rate').value;
-  const pmt = document.getElementById('payment').value;
-
-  const empty = [!P, !n, !r, !pmt];
-  const emptyCount = empty.filter(Boolean).length;
-
-  if (emptyCount === 0) { solve('payment'); return; }
-  if (emptyCount > 1)   { showError('Заполните любые 3 поля из 4'); return; }
-
-  if (!P)   solve('amount');
-  else if (!n)   solve('quarters');
-  else if (!r)   solve('rate');
-  else           solve('payment');
+  const vals = ['loanAmount','quarters','rate','payment'].map(id => document.getElementById(id).value);
+  const empty = vals.filter(v => !v).length;
+  if (empty === 0) { solve('payment'); return; }
+  if (empty > 1)   { showError('Заполните любые 3 поля из 4'); return; }
+  if (!vals[0]) solve('amount');
+  else if (!vals[1]) solve('quarters');
+  else if (!vals[2]) solve('rate');
+  else solve('payment');
 }
 
-// ── Main solve ──
 function solve(target) {
   hideError();
   const comp = document.getElementById('compounding').value;
@@ -707,43 +697,43 @@ function solve(target) {
   const n    = parseFloat(document.getElementById('quarters').value);
   const rA   = parseFloat(document.getElementById('rate').value);
   const pmt  = parseFloat(document.getElementById('payment').value);
-
   let result, calcP, calcN, calcQ, calcPmt;
 
   try {
     if (target === 'payment') {
       if (isNaN(P)||isNaN(n)||isNaN(rA)) { showError('Укажите сумму, кол-во кварталов и ставку'); return; }
+      if (P<=0||n<=0) { showError('Значения должны быть больше нуля'); return; }
       calcQ = effectiveQuarterlyRate(rA, comp);
       result = calcQ===0 ? P/n : P*calcQ*Math.pow(1+calcQ,n)/(Math.pow(1+calcQ,n)-1);
       document.getElementById('payment').value = result.toFixed(2);
       calcP=P; calcN=n; calcPmt=result;
-
     } else if (target === 'amount') {
       if (isNaN(pmt)||isNaN(n)||isNaN(rA)) { showError('Укажите платёж, кол-во кварталов и ставку'); return; }
+      if (pmt<=0||n<=0) { showError('Значения должны быть больше нуля'); return; }
       calcQ = effectiveQuarterlyRate(rA, comp);
       result = calcQ===0 ? pmt*n : pmt*(1-Math.pow(1+calcQ,-n))/calcQ;
       document.getElementById('loanAmount').value = result.toFixed(2);
       calcP=result; calcN=n; calcPmt=pmt;
-
     } else if (target === 'quarters') {
       if (isNaN(P)||isNaN(pmt)||isNaN(rA)) { showError('Укажите сумму, платёж и ставку'); return; }
+      if (P<=0||pmt<=0) { showError('Значения должны быть больше нуля'); return; }
       calcQ = effectiveQuarterlyRate(rA, comp);
       if (calcQ===0) result = P/pmt;
       else {
-        if (pmt <= P*calcQ) { showError('Платёж слишком мал для погашения кредита'); return; }
-        result = -Math.log(1 - P*calcQ/pmt)/Math.log(1+calcQ);
+        if (pmt <= P*calcQ) { showError('Платёж слишком мал — кредит не погасить'); return; }
+        result = -Math.log(1 - P*calcQ/pmt) / Math.log(1+calcQ);
       }
       result = Math.ceil(result);
       document.getElementById('quarters').value = result;
       calcP=P; calcN=result; calcPmt=pmt;
-
     } else if (target === 'rate') {
       if (isNaN(P)||isNaN(n)||isNaN(pmt)) { showError('Укажите сумму, кол-во кварталов и платёж'); return; }
+      if (P<=0||n<=0||pmt<=0) { showError('Значения должны быть больше нуля'); return; }
       let lo=0, hi=10, q=0;
       for (let i=0;i<250;i++) {
         q=(lo+hi)/2;
         const c = q===0 ? P/n : P*q*Math.pow(1+q,n)/(Math.pow(1+q,n)-1);
-        if (c < pmt) lo=q; else hi=q;
+        if (c<pmt) lo=q; else hi=q;
       }
       result = q*4*100;
       document.getElementById('rate').value = result.toFixed(4);
@@ -751,77 +741,60 @@ function solve(target) {
     }
 
     twa?.HapticFeedback?.notificationOccurred('success');
-    displayResult(target, result, calcP, calcN, calcQ ?? effectiveQuarterlyRate(
-      parseFloat(document.getElementById('rate').value)||0,
-      document.getElementById('compounding').value
-    ), calcPmt);
-
-  } catch(e) {
-    showError('Ошибка расчёта. Проверьте введённые данные.');
-  }
+    displayResult(target, result, calcP, calcN,
+      calcQ ?? effectiveQuarterlyRate(parseFloat(document.getElementById('rate').value)||0, comp),
+      calcPmt
+    );
+  } catch(e) { showError('Ошибка расчёта. Проверьте данные.'); }
 }
 
-// ── Display ──
-const LABELS = {
-  payment:  'Квартальный платёж',
-  amount:   'Сумма кредита',
-  quarters: 'Кол-во кварталов',
-  rate:     'Годовая ставка'
-};
+const LABELS = { payment:'Квартальный платёж', amount:'Сумма кредита', quarters:'Количество кварталов', rate:'Годовая ставка' };
 
 function displayResult(target, result, P, n, q, pmt) {
   document.getElementById('resultLabel').textContent = LABELS[target];
-
-  if (target === 'quarters')
-    document.getElementById('resultAmount').textContent = result + ' кв.';
-  else if (target === 'rate')
-    document.getElementById('resultAmount').textContent = result.toFixed(4) + '%';
-  else
-    document.getElementById('resultAmount').textContent = fmtFull(result);
-
-  const totalPaid    = pmt * n;
-  const totalInterest = Math.max(0, totalPaid - P);
-  document.getElementById('statTotal').textContent    = fmtMoney(totalPaid);
-  document.getElementById('statInterest').textContent = fmtMoney(totalInterest);
-  document.getElementById('statPrincipal').textContent= fmtMoney(P);
-
+  if (target === 'quarters') {
+    document.getElementById('resultPrefix').textContent = '';
+    document.getElementById('resultValue').textContent  = result + ' кв.';
+  } else if (target === 'rate') {
+    document.getElementById('resultPrefix').textContent = '';
+    document.getElementById('resultValue').textContent  = result.toFixed(4) + ' %';
+  } else {
+    document.getElementById('resultPrefix').textContent = 'THB ';
+    document.getElementById('resultValue').textContent  = fmtFull(result);
+  }
+  const total = pmt*n, interest = Math.max(0, total-P);
+  document.getElementById('statTotal').textContent    = fmtCompact(total);
+  document.getElementById('statInterest').textContent = fmtCompact(interest);
+  document.getElementById('statPrincipal').textContent= fmtCompact(P);
   document.getElementById('resultSection').classList.add('visible');
   document.getElementById('scheduleSection').classList.add('visible');
-
   buildSchedule(P, n, q, pmt);
-
-  // Scroll to result
-  setTimeout(() => {
-    document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, 100);
+  setTimeout(() => document.getElementById('resultSection').scrollIntoView({behavior:'smooth',block:'nearest'}), 80);
 }
 
-// ── Amortization ──
 function buildSchedule(P, n, q, pmt) {
   const tbody = document.getElementById('amortBody');
   tbody.innerHTML = '';
   let balance = P;
   const rows = Math.min(Math.ceil(n), 200);
   for (let i=1; i<=rows; i++) {
-    const interest   = balance * q;
-    let principal    = pmt - interest;
-    if (i === rows) principal = balance;
+    const interest  = balance * q;
+    let   principal = pmt - interest;
+    if (i===rows) principal = balance;
     balance = Math.max(0, balance - principal);
-
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${i}</td>
-      <td style="color:var(--gold-light)">${fmtMoney(interest+principal)}</td>
-      <td style="color:var(--danger)">${fmtMoney(interest)}</td>
-      <td style="color:var(--success)">${fmtMoney(principal)}</td>
-      <td>${fmtMoney(balance)}</td>
+      <td style="color:var(--gold-light)">${fmtCompact(interest+principal)}</td>
+      <td style="color:var(--danger)">${fmtCompact(interest)}</td>
+      <td style="color:var(--success)">${fmtCompact(principal)}</td>
+      <td>${fmtCompact(balance)}</td>
     `;
     tbody.appendChild(tr);
     if (balance <= 0) break;
   }
 }
 
-// ── Schedule toggle ──
 let schedOpen = false;
 function toggleSchedule() {
   schedOpen = !schedOpen;
@@ -830,7 +803,6 @@ function toggleSchedule() {
   twa?.HapticFeedback?.impactOccurred('light');
 }
 
-// ── Clear ──
 function clearAll() {
   ['loanAmount','quarters','rate','payment'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('resultSection').classList.remove('visible');
@@ -842,11 +814,8 @@ function clearAll() {
   twa?.HapticFeedback?.impactOccurred('medium');
 }
 
-// ── Keyboard: blur on Enter ──
 document.querySelectorAll('input').forEach(inp => {
-  inp.addEventListener('keydown', e => {
-    if (e.key === 'Enter') { inp.blur(); autoSolve(); }
-  });
+  inp.addEventListener('keydown', e => { if (e.key==='Enter') { inp.blur(); autoSolve(); } });
 });
 </script>
 </body>
