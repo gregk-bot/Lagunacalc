@@ -399,7 +399,7 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
       <div class="field-icon-col"><div class="field-icon-box">
         <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
       </div></div>
-      <div class="field-body"><div class="field-name">Сумма кредита</div><div class="field-hint">principal · THB</div></div>
+      <div class="field-body"><div class="field-name">Тело кредита</div><div class="field-hint">principal · THB</div></div>
       <div class="field-controls">
         <input type="number" id="loanAmount" placeholder="1000000" inputmode="decimal">
         <button class="calc-btn" onclick="solve('amount')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -485,7 +485,7 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
 <div class="bottom-bar">
   <button class="btn-send" id="btnSend" onclick="sendToChat()">
     <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
-    Скопировать
+    Скопировать расчёт
   </button>
   <div class="bottom-row">
     <button class="btn-secondary" onclick="clearAll()">Сброс</button>
@@ -716,7 +716,7 @@ function solve(target) {
   } catch(e) { showError('Ошибка расчёта. Проверьте данные.'); }
 }
 
-const LABELS = { payment:'Квартальный платёж', amount:'Сумма кредита', quarters:'Количество кварталов', rate:'Годовая ставка' };
+const LABELS = { payment:'Квартальный платёж', amount:'Тело кредита', quarters:'Количество кварталов', rate:'Годовая ставка' };
 
 function displayResult(target, result, P, n, q, pmt) {
   document.getElementById('resultLabel').textContent = LABELS[target];
@@ -819,7 +819,7 @@ function buildSummaryText() {
     '💰 Кредитный расчёт (THB)',
     '─────────────────────',
     `Квартальный платёж: ${fmtFull(r.paymentTHB)} THB`,
-    `Сумма кредита:      ${fmtFull(r.principalTHB)} THB`,
+    `Тело кредита:       ${fmtFull(r.principalTHB)} THB`,
     `Кол-во кварталов:   ${r.quarters} (${(r.quarters/4).toFixed(1)} лет)`,
     `Годовая ставка:     ${r.rate.toFixed(2)}% (${COMP_LABELS[r.comp]||r.comp})`,
     '─────────────────────',
