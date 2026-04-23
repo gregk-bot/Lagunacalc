@@ -6,7 +6,14 @@
 <meta name="format-detection" content="telephone=no">
 <title>Кредитный Калькулятор</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!--
+  Типографика:
+  — Inter        → весь интерфейс: заголовки, подписи, кнопки, лейблы
+  — JetBrains Mono → только числа: поля ввода, суммы, курсы, таблица
+-->
+
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -18,175 +25,180 @@
   --border2:   rgba(255,255,255,0.04);
   --gold:      #e6a817;
   --gold-light:#f5c24a;
-  --gold-dim:  rgba(230,168,23,0.11);
-  --gold-mid:  rgba(230,168,23,0.22);
-  --text:      #f0f2f5;
-  --text-sec:  #9ba3b0;
-  --text-dim:  #5a6270;
+  --gold-dim:  rgba(230,168,23,0.10);
+  --gold-mid:  rgba(230,168,23,0.20);
+  --text:      #edf0f4;
+  --text-sec:  #8b95a6;
+  --text-dim:  #4e5769;
   --success:   #3ecf8e;
   --danger:    #f06a6a;
-  --blue:      #60a5fa;
+  --blue:      #5b9cf6;
   --radius:    14px;
   --radius-sm: 10px;
+
+  /* Typography */
+  --font-ui:   'Inter', system-ui, sans-serif;
+  --font-num:  'JetBrains Mono', monospace;
 }
 
 html, body {
   height: 100%;
   background: var(--bg);
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.4;
   overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
 }
 body { display: flex; flex-direction: column; min-height: 100vh; min-height: -webkit-fill-available; }
 
-/* ── HEADER ── */
+/* ────────── HEADER ────────── */
 .app-header {
-  padding: 14px 18px 13px;
-  display: flex; align-items: center; gap: 13px;
+  padding: 13px 16px 12px;
+  display: flex; align-items: center; gap: 12px;
   border-bottom: 1px solid var(--border);
   background: var(--bg);
   position: sticky; top: 0; z-index: 10;
 }
 .header-icon {
-  width: 36px; height: 36px;
+  width: 34px; height: 34px;
   background: var(--gold-dim); border: 1px solid var(--gold-mid);
   border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.header-icon svg { width: 17px; height: 17px; stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.header-icon svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .header-text { flex: 1; min-width: 0; }
-.header-title { font-size: 15px; font-weight: 800; letter-spacing: -0.01em; color: var(--text); line-height: 1.2; }
-.header-sub   { font-size: 11px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.03em; margin-top: 1px; }
+.header-title { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
+.header-sub   { font-size: 11px; color: var(--text-dim); margin-top: 1px; letter-spacing: 0.01em; }
 .header-tag {
-  font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 3px 9px;
+  font-family: var(--font-num); font-size: 10px; padding: 3px 8px;
   background: var(--gold-dim); border: 1px solid var(--gold-mid);
-  border-radius: 20px; color: var(--gold); letter-spacing: 0.06em; white-space: nowrap;
+  border-radius: 20px; color: var(--gold); letter-spacing: 0.04em; white-space: nowrap;
 }
 
-/* ── CONTENT ── */
+/* ────────── CONTENT ────────── */
 .content {
   flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-  padding: 14px 14px 130px; scrollbar-width: none;
+  padding: 12px 12px 130px; scrollbar-width: none;
 }
 .content::-webkit-scrollbar { display: none; }
 
-/* ── RESULT CARD ── */
-.result-section { margin-bottom: 10px; display: none; animation: slideUp 0.32s cubic-bezier(0.34,1.56,0.64,1) both; }
+/* ────────── RESULT CARD ────────── */
+.result-section { margin-bottom: 10px; display: none; animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
 .result-section.visible { display: block; }
+
 .result-card {
-  background: var(--surface); border: 1px solid rgba(230,168,23,0.25);
-  border-radius: var(--radius); padding: 18px 20px; position: relative; overflow: hidden;
+  background: var(--surface); border: 1px solid rgba(230,168,23,0.22);
+  border-radius: var(--radius); padding: 18px 18px 16px; position: relative; overflow: hidden;
 }
 .result-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%); opacity: 0.5;
+  background: linear-gradient(90deg, transparent, var(--gold) 50%, transparent); opacity: 0.45;
 }
 .result-label-sm {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--gold); font-family: 'JetBrains Mono', monospace; margin-bottom: 5px;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 6px;
 }
 .result-amount {
-  font-size: 30px; font-weight: 800; letter-spacing: -0.03em; color: var(--text); line-height: 1; margin-bottom: 16px;
+  font-family: var(--font-num); font-size: 28px; font-weight: 600;
+  letter-spacing: -0.02em; color: var(--text); line-height: 1; margin-bottom: 16px;
 }
-.result-currency { font-size: 17px; color: var(--text-sec); margin-right: 4px; }
-.result-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-.stat-item { background: rgba(0,0,0,0.25); border: 1px solid var(--border2); border-radius: 9px; padding: 10px 8px; text-align: center; }
-.stat-value { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.stat-label { font-size: 9px; color: var(--text-dim); letter-spacing: 0.07em; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+.result-currency { font-size: 16px; color: var(--text-sec); margin-right: 3px; font-weight: 400; }
+
+.result-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+.stat-item { background: rgba(0,0,0,0.22); border: 1px solid var(--border2); border-radius: 9px; padding: 10px 8px; text-align: center; }
+.stat-value { font-family: var(--font-num); font-size: 12px; font-weight: 500; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-label { font-size: 10px; font-weight: 500; color: var(--text-dim); letter-spacing: 0.02em; }
 .c-gold  { color: var(--gold-light); }
 .c-red   { color: var(--danger); }
 .c-green { color: var(--success); }
 
-/* ── CURRENCY CONVERSION ── */
-.fx-section { margin-bottom: 10px; display: none; animation: slideUp 0.32s cubic-bezier(0.34,1.56,0.64,1) 0.04s both; }
+/* ────────── FX SECTION ────────── */
+.fx-section { margin-bottom: 10px; display: none; animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1) 0.05s both; }
 .fx-section.visible { display: block; }
-.fx-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
-}
+.fx-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+
 .fx-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px 10px;
-  border-bottom: 1px solid var(--border);
+  padding: 11px 14px 10px; border-bottom: 1px solid var(--border);
 }
 .fx-title-row { display: flex; align-items: center; gap: 8px; }
 .fx-icon {
-  width: 26px; height: 26px; background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.2);
-  border-radius: 7px; display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; background: rgba(91,156,246,0.1); border: 1px solid rgba(91,156,246,0.2);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
 }
-.fx-icon svg { width: 12px; height: 12px; stroke: var(--blue); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.fx-title { font-size: 12px; font-weight: 700; color: var(--text); letter-spacing: 0.02em; }
-.fx-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); }
-.fx-rates { display: grid; grid-template-columns: 1fr 1fr 1fr; }
-.fx-rate-item {
-  padding: 14px 10px 12px;
-  border-right: 1px solid var(--border2);
-  text-align: center;
-}
-.fx-rate-item:last-child { border-right: none; }
-.fx-flag { font-size: 18px; margin-bottom: 6px; line-height: 1; }
-.fx-code { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
-.fx-amount { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.2; word-break: break-all; }
-.fx-amount.loading { color: var(--text-dim); animation: pulse 1s ease infinite; }
-.fx-amount.error { color: var(--danger); font-size: 11px; }
-.fx-sub { margin-top: 3px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); }
-.fx-context-label { font-size: 10px; color: var(--text-dim); padding: 0 16px 10px; font-family: 'JetBrains Mono', monospace; }
-.fx-tabs {
-  display: flex; gap: 0;
-  padding: 10px 16px 12px;
-  border-top: 1px solid var(--border2);
-}
+.fx-icon svg { width: 11px; height: 11px; stroke: var(--blue); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fx-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.fx-meta  { font-family: var(--font-num); font-size: 10px; color: var(--text-dim); }
+
+.fx-tabs { display: flex; padding: 10px 14px 11px; gap: 0; border-bottom: 1px solid var(--border2); }
 .fx-tab {
-  flex: 1; padding: 7px 4px;
+  flex: 1; padding: 7px 4px; text-align: center;
   background: var(--surface2); border: 1px solid var(--border);
-  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500;
-  color: var(--text-sec); cursor: pointer;
-  transition: background 0.15s, color 0.15s; text-align: center;
+  font-size: 12px; font-weight: 500; color: var(--text-sec);
+  cursor: pointer; transition: background 0.15s, color 0.15s;
 }
 .fx-tab:first-child { border-radius: 8px 0 0 8px; border-right: none; }
-.fx-tab:nth-child(2) { border-radius: 0; }
-.fx-tab:last-child { border-radius: 0 8px 8px 0; border-left: none; }
+.fx-tab:nth-child(2) { border-left: none; border-right: none; }
+.fx-tab:last-child  { border-radius: 0 8px 8px 0; border-left: none; }
 .fx-tab.active { background: var(--gold-dim); border-color: var(--gold-mid); color: var(--gold-light); }
 .fx-tab:active { opacity: 0.7; }
 
-/* ── SECTION BLOCK ── */
+.fx-rates { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.fx-rate-item { padding: 13px 8px 12px; border-right: 1px solid var(--border2); text-align: center; }
+.fx-rate-item:last-child { border-right: none; }
+.fx-flag  { font-size: 17px; margin-bottom: 5px; line-height: 1; }
+.fx-code  { font-size: 10px; font-weight: 600; color: var(--text-dim); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px; }
+.fx-amount{ font-family: var(--font-num); font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; word-break: break-all; }
+.fx-amount.loading { color: var(--text-dim); animation: pulse 1.2s ease infinite; }
+.fx-amount.error   { color: var(--danger); font-size: 11px; }
+.fx-sub   { margin-top: 3px; font-family: var(--font-num); font-size: 9px; color: var(--text-dim); }
+
+/* ────────── SECTION ────────── */
 .section {
   margin-bottom: 10px; background: var(--surface);
   border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border);
-  animation: slideUp 0.3s ease both;
+  animation: slideUp 0.28s ease both;
 }
-.section:nth-child(3) { animation-delay: 0.04s; }
-.section:nth-child(4) { animation-delay: 0.08s; }
+.section:nth-child(3) { animation-delay: 0.05s; }
+.section:nth-child(4) { animation-delay: 0.10s; }
+
 .section-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-dim); padding: 12px 16px 8px; font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-dim); padding: 11px 14px 7px;
 }
 
-/* ── FIELD ROW ── */
+/* ────────── FIELD ROW ────────── */
 .field-row {
-  display: flex; align-items: center; padding: 0 12px 0 0;
-  border-bottom: 1px solid var(--border2); transition: background 0.15s;
+  display: flex; align-items: center; padding: 0 11px 0 0;
+  border-bottom: 1px solid var(--border2); transition: background 0.12s;
 }
 .field-row:last-child { border-bottom: none; }
-.field-icon-col { width: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 14px 0; }
+
+.field-icon-col { width: 42px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 13px 0; }
 .field-icon-box {
-  width: 28px; height: 28px; background: var(--surface2); border: 1px solid var(--border);
+  width: 27px; height: 27px; background: var(--surface2); border: 1px solid var(--border);
   border-radius: 7px; display: flex; align-items: center; justify-content: center;
 }
-.field-icon-box svg { width: 13px; height: 13px; stroke: var(--text-sec); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
-.field-body { flex: 1; padding: 12px 10px 12px 4px; min-width: 0; }
-.field-name { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 2px; }
-.field-hint { font-size: 10px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.03em; }
+.field-icon-box svg { width: 12px; height: 12px; stroke: var(--text-sec); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+
+.field-body { flex: 1; padding: 11px 8px 11px 3px; min-width: 0; }
+.field-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.2; margin-bottom: 2px; }
+.field-hint { font-size: 11px; font-weight: 400; color: var(--text-dim); }
+
 .field-controls { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
 
 input[type="number"] {
   background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500;
+  color: var(--text); font-family: var(--font-num); font-size: 14px; font-weight: 500;
   padding: 9px 10px; width: 108px; text-align: right; outline: none;
-  -webkit-appearance: none; appearance: none; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none; appearance: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
 input[type="number"]:focus {
-  border-color: rgba(230,168,23,0.55); background: rgba(230,168,23,0.05);
-  box-shadow: 0 0 0 3px rgba(230,168,23,0.09);
+  border-color: rgba(230,168,23,0.5); background: rgba(230,168,23,0.04);
+  box-shadow: 0 0 0 3px rgba(230,168,23,0.08);
 }
 input[type="number"]::placeholder { color: var(--text-dim); }
 input[type="number"]::-webkit-inner-spin-button,
@@ -195,37 +207,40 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .calc-btn {
   width: 30px; height: 30px; background: var(--gold-dim); border: 1px solid var(--gold-mid);
   border-radius: 8px; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; flex-shrink: 0; transition: background 0.2s, transform 0.1s;
+  cursor: pointer; flex-shrink: 0; transition: background 0.15s, transform 0.1s;
 }
-.calc-btn:active { transform: scale(0.88); background: rgba(230,168,23,0.3); }
+.calc-btn:active { transform: scale(0.88); background: rgba(230,168,23,0.28); }
 .calc-btn svg { width: 13px; height: 13px; stroke: var(--gold); fill: none; stroke-linecap: round; stroke-width: 2.2; }
 
 select {
   background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--text); font-family: var(--font-ui); font-size: 13px; font-weight: 400;
   padding: 9px 26px 9px 10px; outline: none; -webkit-appearance: none; appearance: none; cursor: pointer;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23e6a817' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 9px center; min-width: 140px; transition: border-color 0.2s;
+  background-repeat: no-repeat; background-position: right 9px center; min-width: 140px;
+  transition: border-color 0.2s;
 }
 select:focus { border-color: rgba(230,168,23,0.5); }
-select option { background: #1c2333; color: #f0f2f5; }
+select option { background: #1c2333; color: #edf0f4; }
 
-/* ── SCHEDULE ── */
-.schedule-section { margin-bottom: 10px; display: none; animation: slideUp 0.32s cubic-bezier(0.34,1.56,0.64,1) 0.08s both; }
+/* ────────── SCHEDULE ────────── */
+.schedule-section { margin-bottom: 10px; display: none; animation: slideUp 0.3s ease 0.08s both; }
 .schedule-section.visible { display: block; }
+
 .schedule-toggle {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 16px; background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); cursor: pointer; user-select: none; -webkit-user-select: none; transition: background 0.15s;
+  padding: 13px 14px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer; user-select: none; -webkit-user-select: none;
+  transition: background 0.12s;
 }
 .schedule-toggle:active { background: var(--surface2); }
-.schedule-toggle-left { display: flex; align-items: center; gap: 10px; }
+.schedule-toggle-left { display: flex; align-items: center; gap: 9px; }
 .sched-icon {
-  width: 28px; height: 28px; background: var(--surface2); border: 1px solid var(--border);
+  width: 27px; height: 27px; background: var(--surface2); border: 1px solid var(--border);
   border-radius: 7px; display: flex; align-items: center; justify-content: center;
 }
-.sched-icon svg { width: 13px; height: 13px; stroke: var(--text-sec); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
-.schedule-toggle-text { font-size: 14px; font-weight: 700; color: var(--text); }
+.sched-icon svg { width: 12px; height: 12px; stroke: var(--text-sec); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+.schedule-toggle-text { font-size: 13px; font-weight: 600; color: var(--text); }
 .sched-chevron { display: flex; align-items: center; transition: transform 0.25s; }
 .sched-chevron svg { width: 14px; height: 14px; stroke: var(--text-dim); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
 .sched-chevron.open { transform: rotate(180deg); }
@@ -235,97 +250,94 @@ select option { background: #1c2333; color: #f0f2f5; }
   border-radius: var(--radius); overflow: hidden; max-height: 280px; overflow-y: auto;
   scrollbar-width: thin; scrollbar-color: var(--border) transparent; display: none;
 }
-.schedule-table-wrap::-webkit-scrollbar { width: 4px; }
+.schedule-table-wrap::-webkit-scrollbar { width: 3px; }
 .schedule-table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 .schedule-table-wrap.open { display: block; }
 
-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; }
+table { width: 100%; border-collapse: collapse; }
 thead { position: sticky; top: 0; z-index: 1; background: var(--surface2); }
 th {
-  padding: 9px 11px; text-align: right; font-size: 9px; letter-spacing: 0.09em; text-transform: uppercase;
-  color: var(--text-dim); border-bottom: 1px solid var(--border); font-family: 'Syne', sans-serif; font-weight: 700;
+  padding: 9px 10px; text-align: right;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--text-dim); border-bottom: 1px solid var(--border);
 }
-th:first-child { text-align: center; width: 32px; }
+th:first-child { text-align: center; width: 30px; }
 tbody tr { border-bottom: 1px solid var(--border2); }
 tbody tr:last-child { border-bottom: none; }
-tbody tr:nth-child(even) { background: rgba(255,255,255,0.015); }
-td { padding: 9px 11px; text-align: right; font-size: 11px; color: var(--text); }
+tbody tr:nth-child(even) { background: rgba(255,255,255,0.014); }
+td { padding: 9px 10px; text-align: right; font-family: var(--font-num); font-size: 11px; font-weight: 400; color: var(--text); }
 td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
 
-/* ── ERROR ── */
+/* ────────── ERROR ────────── */
 .error-toast {
-  display: none; margin-bottom: 10px; padding: 11px 14px;
-  background: rgba(240,106,106,0.1); border: 1px solid rgba(240,106,106,0.22);
+  display: none; margin-bottom: 10px; padding: 11px 13px;
+  background: rgba(240,106,106,0.09); border: 1px solid rgba(240,106,106,0.20);
   border-radius: var(--radius-sm); font-size: 13px; color: var(--danger);
-  font-family: 'JetBrains Mono', monospace; animation: slideUp 0.25s ease both;
   gap: 8px; align-items: flex-start; line-height: 1.4;
 }
-.error-toast.visible { display: flex; }
+.error-toast.visible { display: flex; animation: slideUp 0.22s ease both; }
+.error-icon { flex-shrink: 0; margin-top: 1px; }
 .error-icon svg { width: 14px; height: 14px; stroke: var(--danger); fill: none; stroke-linecap: round; stroke-width: 2; }
 
-/* ── BOTTOM BAR ── */
+/* ────────── BOTTOM BAR ────────── */
 .bottom-bar {
   position: fixed; bottom: 0; left: 0; right: 0;
-  padding: 10px 14px;
-  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  padding: 8px 12px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
   background: linear-gradient(to top, var(--bg) 60%, transparent);
-  display: flex; flex-direction: column; gap: 8px; z-index: 20;
+  display: flex; flex-direction: column; gap: 7px; z-index: 20;
 }
-.bottom-row { display: flex; gap: 9px; }
+.bottom-row { display: flex; gap: 8px; }
+
 .btn-primary {
-  flex: 1; background: var(--gold); color: #0d1117; border: none; border-radius: var(--radius);
-  padding: 15px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800;
-  letter-spacing: 0.01em; cursor: pointer; transition: transform 0.1s, opacity 0.15s;
+  flex: 1; background: var(--gold); color: #0d1117; border: none;
+  border-radius: var(--radius); padding: 14px;
+  font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: transform 0.1s, opacity 0.15s;
 }
-.btn-primary:active { transform: scale(0.97); opacity: 0.85; }
+.btn-primary:active { transform: scale(0.97); opacity: 0.82; }
+
 .btn-secondary {
   background: var(--surface); color: var(--text-sec); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 15px 18px; font-family: 'Syne', sans-serif;
-  font-size: 13px; font-weight: 700; cursor: pointer; transition: transform 0.1s, background 0.15s; white-space: nowrap;
+  border-radius: var(--radius); padding: 14px 16px;
+  font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: transform 0.1s, background 0.15s; white-space: nowrap;
 }
 .btn-secondary:active { transform: scale(0.97); background: var(--surface2); }
 
-/* Send button */
-.btn-send {
-  display: none; width: 100%; border: none; border-radius: var(--radius);
-  padding: 14px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+.btn-copy {
+  display: none; width: 100%; border: none; border-radius: var(--radius); padding: 13px;
+  font-family: var(--font-ui); font-size: 13px; font-weight: 600;
   cursor: pointer; transition: transform 0.1s, opacity 0.15s;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: #fff; letter-spacing: 0.01em;
-  align-items: center; justify-content: center; gap: 8px;
+  background: var(--surface); color: var(--text-sec);
+  border: 1px solid var(--border);
+  align-items: center; justify-content: center; gap: 7px;
 }
-.btn-send.visible { display: flex; }
-.btn-send:active { transform: scale(0.97); opacity: 0.85; }
-.btn-send svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.btn-copy.visible { display: flex; }
+.btn-copy:active { transform: scale(0.97); opacity: 0.80; }
+.btn-copy.copied { background: rgba(62,207,142,0.1); border-color: rgba(62,207,142,0.3); color: var(--success); }
+.btn-copy svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
-/* Send success toast */
-.send-toast {
-  display: none; position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
-  background: rgba(62,207,142,0.15); border: 1px solid rgba(62,207,142,0.35);
-  color: var(--success); font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  padding: 9px 18px; border-radius: 20px; z-index: 100; white-space: nowrap;
-  animation: fadeToast 0.25s ease both;
-}
-.send-toast.visible { display: block; }
-
-@keyframes fadeToast { from { opacity:0; transform: translateX(-50%) translateY(-8px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+/* ────────── ANIMATIONS ────────── */
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse   { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="app-header">
   <div class="header-icon">
     <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
   </div>
   <div class="header-text">
     <div class="header-title">Кредитный Калькулятор</div>
-    <div class="header-sub">quarterly · loan · calculator</div>
+    <div class="header-sub">Квартальные платежи · THB</div>
   </div>
   <div class="header-tag">THB</div>
 </div>
 
+<!-- CONTENT -->
 <div class="content">
 
   <div class="error-toast" id="errorToast">
@@ -342,32 +354,29 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
       </div>
       <div class="result-stats">
         <div class="stat-item"><div class="stat-value c-gold" id="statTotal">—</div><div class="stat-label">Итого</div></div>
-        <div class="stat-item"><div class="stat-value c-red" id="statInterest">—</div><div class="stat-label">Проценты</div></div>
+        <div class="stat-item"><div class="stat-value c-red"  id="statInterest">—</div><div class="stat-label">Проценты</div></div>
         <div class="stat-item"><div class="stat-value c-green" id="statPrincipal">—</div><div class="stat-label">Долг</div></div>
       </div>
     </div>
   </div>
 
-  <!-- CURRENCY CONVERSION -->
+  <!-- FX CONVERSION -->
   <div class="fx-section" id="fxSection">
     <div class="fx-card">
       <div class="fx-header">
         <div class="fx-title-row">
           <div class="fx-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
           </div>
           <span class="fx-title">Конвертация</span>
         </div>
         <span class="fx-meta" id="fxMeta">загрузка...</span>
       </div>
-
-      <!-- Tabs: платёж / итого / долг -->
       <div class="fx-tabs">
         <button class="fx-tab active" id="tabPayment" onclick="setFxTab('payment')">Платёж</button>
         <button class="fx-tab"        id="tabTotal"   onclick="setFxTab('total')">Итого</button>
         <button class="fx-tab"        id="tabDebt"    onclick="setFxTab('debt')">Долг</button>
       </div>
-
       <div class="fx-rates">
         <div class="fx-rate-item">
           <div class="fx-flag">🇷🇺</div>
@@ -391,7 +400,7 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
     </div>
   </div>
 
-  <!-- FIELDS -->
+  <!-- PARAMS -->
   <div class="section">
     <div class="section-label">Параметры кредита</div>
 
@@ -399,9 +408,12 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
       <div class="field-icon-col"><div class="field-icon-box">
         <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
       </div></div>
-      <div class="field-body"><div class="field-name">Тело кредита</div><div class="field-hint">principal · THB</div></div>
+      <div class="field-body">
+        <div class="field-name">Тело кредита</div>
+        <div class="field-hint">Сумма займа в тайских батах</div>
+      </div>
       <div class="field-controls">
-        <input type="number" id="loanAmount" placeholder="1000000" inputmode="decimal">
+        <input type="number" id="loanAmount" placeholder="1 000 000" inputmode="decimal">
         <button class="calc-btn" onclick="solve('amount')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
       </div>
     </div>
@@ -410,7 +422,10 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
       <div class="field-icon-col"><div class="field-icon-box">
         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
       </div></div>
-      <div class="field-body"><div class="field-name">Количество кварталов</div><div class="field-hint">number of quarters</div></div>
+      <div class="field-body">
+        <div class="field-name">Количество кварталов</div>
+        <div class="field-hint">Срок кредита в кварталах</div>
+      </div>
       <div class="field-controls">
         <input type="number" id="quarters" placeholder="20" inputmode="numeric">
         <button class="calc-btn" onclick="solve('quarters')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -421,7 +436,10 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
       <div class="field-icon-col"><div class="field-icon-box">
         <svg viewBox="0 0 24 24"><path d="M19 5L5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
       </div></div>
-      <div class="field-body"><div class="field-name">Годовая ставка</div><div class="field-hint">annual interest rate · %</div></div>
+      <div class="field-body">
+        <div class="field-name">Годовая ставка</div>
+        <div class="field-hint">Процентная ставка в год</div>
+      </div>
       <div class="field-controls">
         <input type="number" id="rate" placeholder="7.50" inputmode="decimal">
         <button class="calc-btn" onclick="solve('rate')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -432,21 +450,28 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
       <div class="field-icon-col"><div class="field-icon-box">
         <svg viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
       </div></div>
-      <div class="field-body"><div class="field-name">Квартальный платёж</div><div class="field-hint">principal + interest · THB</div></div>
+      <div class="field-body">
+        <div class="field-name">Квартальный платёж</div>
+        <div class="field-hint">Основной долг + проценты</div>
+      </div>
       <div class="field-controls">
-        <input type="number" id="payment" placeholder="15600" inputmode="decimal">
+        <input type="number" id="payment" placeholder="15 600" inputmode="decimal">
         <button class="calc-btn" onclick="solve('payment')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
       </div>
     </div>
   </div>
 
+  <!-- COMPOUNDING -->
   <div class="section">
     <div class="section-label">Начисление процентов</div>
     <div class="field-row">
       <div class="field-icon-col"><div class="field-icon-box">
         <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-6.219-8.56"/><path d="M21 3v5h-5"/></svg>
       </div></div>
-      <div class="field-body"><div class="field-name">Периодичность</div><div class="field-hint">compounding frequency</div></div>
+      <div class="field-body">
+        <div class="field-name">Периодичность</div>
+        <div class="field-hint">Как часто начисляются проценты</div>
+      </div>
       <div class="field-controls">
         <select id="compounding">
           <option value="daily">Ежедневно</option>
@@ -459,6 +484,7 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
     </div>
   </div>
 
+  <!-- SCHEDULE -->
   <div class="schedule-section" id="scheduleSection">
     <div class="schedule-toggle" onclick="toggleSchedule()">
       <div class="schedule-toggle-left">
@@ -483,9 +509,9 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
 
 <!-- BOTTOM BAR -->
 <div class="bottom-bar">
-  <button class="btn-send" id="btnSend" onclick="sendToChat()">
-    <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
-    Скопировать расчёт
+  <button class="btn-copy" id="btnCopy" onclick="copyResult()">
+    <svg id="copyIcon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+    <span id="copyLabel">Скопировать расчёт</span>
   </button>
   <div class="bottom-row">
     <button class="btn-secondary" onclick="clearAll()">Сброс</button>
@@ -493,17 +519,17 @@ td:first-child { text-align: center; color: var(--text-dim); font-size: 10px; }
   </div>
 </div>
 
-<div class="send-toast" id="sendToast">Скопировано в буфер обмена</div>
-
 <script>
+'use strict';
+
 const twa = window.Telegram?.WebApp;
 if (twa) { twa.ready(); twa.expand(); twa.enableClosingConfirmation?.(); }
 
 // ── State ──
-let lastResult = null;   // { label, paymentTHB, totalTHB, interestTHB, principalTHB, quarters, rate }
-let fxRates    = null;   // { RUB, USD, EUR } — THB per 1 unit
-let fxTab      = 'payment';
+let lastResult = null;
+let fxRates    = null;
 let fxLoading  = false;
+let fxTab      = 'payment';
 
 // ── Math ──
 function effectiveQuarterlyRate(annual, comp) {
@@ -518,29 +544,23 @@ function effectiveQuarterlyRate(annual, comp) {
   }
 }
 
+function fmtNum(n, decimals = 2) {
+  return n.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
 function fmtCompact(n) {
   if (Math.abs(n) >= 1e6) return (n/1e6).toFixed(2) + 'M';
   if (Math.abs(n) >= 1e3) return (n/1e3).toFixed(1) + 'K';
-  return n.toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
-}
-function fmtFull(n) {
-  return n.toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  return fmtNum(n);
 }
 function fmtFX(n, code) {
   if (code === 'RUB') {
-    if (n >= 1e6) return (n/1e6).toFixed(2)+'M ₽';
-    if (n >= 1e3) return (n/1e3).toFixed(1)+'K ₽';
-    return n.toLocaleString('en-US',{maximumFractionDigits:0})+' ₽';
+    if (n >= 1e6) return (n/1e6).toFixed(2) + 'M ₽';
+    if (n >= 1e3) return fmtNum(n, 0) + ' ₽';
+    return fmtNum(n, 0) + ' ₽';
   }
-  if (code === 'USD') {
-    if (n >= 1e6) return '$'+(n/1e6).toFixed(3)+'M';
-    return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-  }
-  if (code === 'EUR') {
-    if (n >= 1e6) return '€'+(n/1e6).toFixed(3)+'M';
-    return '€'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-  }
-  return n.toFixed(2);
+  if (code === 'USD') return '$' + fmtNum(n, 2);
+  if (code === 'EUR') return '€' + fmtNum(n, 2);
+  return fmtNum(n);
 }
 
 // ── Error ──
@@ -552,35 +572,34 @@ function showError(msg) {
   twa?.HapticFeedback?.notificationOccurred('error');
   errorTimer = setTimeout(() => document.getElementById('errorToast').classList.remove('visible'), 3500);
 }
-function hideError() { clearTimeout(errorTimer); document.getElementById('errorToast').classList.remove('visible'); }
+function hideError() {
+  clearTimeout(errorTimer);
+  document.getElementById('errorToast').classList.remove('visible');
+}
 
-// ── Fetch exchange rates ──
+// ── Exchange rates ──
 async function fetchRates() {
   if (fxRates || fxLoading) return;
   fxLoading = true;
   try {
-    // Primary: open.er-api.com (free, no key)
-    const res = await fetch('https://open.er-api.com/v6/latest/THB');
-    if (!res.ok) throw new Error();
+    const res  = await fetch('https://open.er-api.com/v6/latest/THB');
     const data = await res.json();
     if (data.result !== 'success') throw new Error();
-    // rates are: 1 THB = X currency, we need THB per 1 currency
     fxRates = {
       RUB: 1 / data.rates.RUB,
       USD: 1 / data.rates.USD,
       EUR: 1 / data.rates.EUR,
-      updatedAt: new Date(data.time_last_update_utc).toLocaleDateString('ru-RU', {day:'2-digit',month:'2-digit',year:'2-digit'})
+      date: new Date(data.time_last_update_utc).toLocaleDateString('ru-RU', { day:'2-digit', month:'2-digit', year:'2-digit' })
     };
   } catch {
     try {
-      // Fallback: exchangerate-api.com
-      const res2 = await fetch('https://api.exchangerate-api.com/v4/latest/THB');
+      const res2  = await fetch('https://api.exchangerate-api.com/v4/latest/THB');
       const data2 = await res2.json();
       fxRates = {
         RUB: 1 / data2.rates.RUB,
         USD: 1 / data2.rates.USD,
         EUR: 1 / data2.rates.EUR,
-        updatedAt: 'актуально'
+        date: 'актуально'
       };
     } catch {
       fxRates = { error: true };
@@ -590,64 +609,49 @@ async function fetchRates() {
   if (lastResult) updateFX();
 }
 
+function thbAmountByTab() {
+  if (!lastResult) return 0;
+  return { payment: lastResult.paymentTHB, total: lastResult.totalTHB, debt: lastResult.principalTHB }[fxTab] ?? 0;
+}
+
 function updateFX() {
-  if (!lastResult || !fxRates) return;
+  if (!lastResult) return;
+  const thb = thbAmountByTab();
 
-  const amountByTab = {
-    payment: lastResult.paymentTHB,
-    total:   lastResult.totalTHB,
-    debt:    lastResult.principalTHB
-  };
-  const thb = amountByTab[fxTab] || 0;
-
-  if (fxRates.error) {
+  if (!fxRates || fxRates.error) {
     ['RUB','USD','EUR'].forEach(c => {
-      const el = document.getElementById('fx'+c);
-      el.textContent = 'нет данных';
-      el.className = 'fx-amount error';
+      const el = document.getElementById('fx' + c);
+      el.textContent = fxRates?.error ? 'нет данных' : '···';
+      el.className   = fxRates?.error ? 'fx-amount error' : 'fx-amount loading';
+      document.getElementById('fx' + c + 'rate').textContent = '';
     });
-    document.getElementById('fxMeta').textContent = 'ошибка загрузки';
+    document.getElementById('fxMeta').textContent = fxRates?.error ? 'ошибка загрузки' : 'загрузка...';
     return;
   }
 
-  document.getElementById('fxMeta').textContent = fxRates.updatedAt || '';
+  document.getElementById('fxMeta').textContent = fxRates.date || '';
 
-  const pairs = [
-    { code:'RUB', rate: fxRates.RUB },
-    { code:'USD', rate: fxRates.USD },
-    { code:'EUR', rate: fxRates.EUR }
-  ];
-  pairs.forEach(({ code, rate }) => {
-    const converted = thb / rate;
-    const el = document.getElementById('fx'+code);
+  [['RUB', fxRates.RUB], ['USD', fxRates.USD], ['EUR', fxRates.EUR]].forEach(([code, thbPerUnit]) => {
+    const converted = thb / thbPerUnit;
+    const el = document.getElementById('fx' + code);
     el.textContent = fmtFX(converted, code);
-    el.className = 'fx-amount';
-    // show exchange rate
-    const rateEl = document.getElementById('fx'+code+'rate');
-    rateEl.textContent = '1 '+code+' = '+fmtCompact(rate)+' THB';
+    el.className   = 'fx-amount';
+    document.getElementById('fx' + code + 'rate').textContent = '1 ' + code + ' = ' + fmtNum(thbPerUnit, 2) + ' THB';
   });
 }
 
 function setFxTab(tab) {
   fxTab = tab;
   ['payment','total','debt'].forEach(t => {
-    document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1))?.classList.toggle('active', t===tab);
+    const id = 'tab' + t.charAt(0).toUpperCase() + t.slice(1);
+    document.getElementById(id)?.classList.toggle('active', t === tab);
   });
-  // set loading state if rates not yet loaded
-  if (!fxRates) {
-    ['RUB','USD','EUR'].forEach(c => {
-      const el = document.getElementById('fx'+c);
-      el.textContent = '···';
-      el.className = 'fx-amount loading';
-    });
-  } else {
-    updateFX();
-  }
+  updateFX();
 }
 
-// ── Auto solve ──
+// ── Solve ──
 function autoSolve() {
-  const vals = ['loanAmount','quarters','rate','payment'].map(id => document.getElementById(id).value);
+  const vals = ['loanAmount','quarters','rate','payment'].map(id => document.getElementById(id).value.trim());
   const empty = vals.filter(v => !v).length;
   if (empty === 0) { solve('payment'); return; }
   if (empty > 1)   { showError('Заполните любые 3 поля из 4'); return; }
@@ -657,7 +661,6 @@ function autoSolve() {
   else solve('payment');
 }
 
-// ── Solve ──
 function solve(target) {
   hideError();
   const comp = document.getElementById('compounding').value;
@@ -669,57 +672,73 @@ function solve(target) {
 
   try {
     if (target === 'payment') {
-      if (isNaN(P)||isNaN(n)||isNaN(rA)) { showError('Укажите сумму, кол-во кварталов и ставку'); return; }
-      if (P<=0||n<=0) { showError('Значения должны быть больше нуля'); return; }
-      calcQ = effectiveQuarterlyRate(rA, comp);
-      result = calcQ===0 ? P/n : P*calcQ*Math.pow(1+calcQ,n)/(Math.pow(1+calcQ,n)-1);
+      if (isNaN(P)||isNaN(n)||isNaN(rA)) { showError('Укажите тело кредита, количество кварталов и ставку'); return; }
+      if (P <= 0 || n <= 0) { showError('Значения должны быть больше нуля'); return; }
+      calcQ   = effectiveQuarterlyRate(rA, comp);
+      result  = calcQ === 0 ? P/n : P * calcQ * Math.pow(1+calcQ,n) / (Math.pow(1+calcQ,n) - 1);
       document.getElementById('payment').value = result.toFixed(2);
-      calcP=P; calcN=n; calcPmt=result;
+      calcP = P; calcN = n; calcPmt = result;
+
     } else if (target === 'amount') {
-      if (isNaN(pmt)||isNaN(n)||isNaN(rA)) { showError('Укажите платёж, кол-во кварталов и ставку'); return; }
-      if (pmt<=0||n<=0) { showError('Значения должны быть больше нуля'); return; }
-      calcQ = effectiveQuarterlyRate(rA, comp);
-      result = calcQ===0 ? pmt*n : pmt*(1-Math.pow(1+calcQ,-n))/calcQ;
+      if (isNaN(pmt)||isNaN(n)||isNaN(rA)) { showError('Укажите платёж, количество кварталов и ставку'); return; }
+      if (pmt <= 0 || n <= 0) { showError('Значения должны быть больше нуля'); return; }
+      calcQ   = effectiveQuarterlyRate(rA, comp);
+      result  = calcQ === 0 ? pmt*n : pmt * (1 - Math.pow(1+calcQ,-n)) / calcQ;
       document.getElementById('loanAmount').value = result.toFixed(2);
-      calcP=result; calcN=n; calcPmt=pmt;
+      calcP = result; calcN = n; calcPmt = pmt;
+
     } else if (target === 'quarters') {
-      if (isNaN(P)||isNaN(pmt)||isNaN(rA)) { showError('Укажите сумму, платёж и ставку'); return; }
-      if (P<=0||pmt<=0) { showError('Значения должны быть больше нуля'); return; }
+      if (isNaN(P)||isNaN(pmt)||isNaN(rA)) { showError('Укажите тело кредита, платёж и ставку'); return; }
+      if (P <= 0 || pmt <= 0) { showError('Значения должны быть больше нуля'); return; }
       calcQ = effectiveQuarterlyRate(rA, comp);
-      if (calcQ===0) result = P/pmt;
+      if (calcQ === 0) { result = P / pmt; }
       else {
-        if (pmt <= P*calcQ) { showError('Платёж слишком мал — кредит не погасить'); return; }
+        if (pmt <= P * calcQ) { showError('Платёж слишком мал — кредит не погасить'); return; }
         result = -Math.log(1 - P*calcQ/pmt) / Math.log(1+calcQ);
       }
       result = Math.ceil(result);
       document.getElementById('quarters').value = result;
-      calcP=P; calcN=result; calcPmt=pmt;
+      calcP = P; calcN = result; calcPmt = pmt;
+
     } else if (target === 'rate') {
-      if (isNaN(P)||isNaN(n)||isNaN(pmt)) { showError('Укажите сумму, кол-во кварталов и платёж'); return; }
-      if (P<=0||n<=0||pmt<=0) { showError('Значения должны быть больше нуля'); return; }
-      let lo=0, hi=10, q=0;
-      for (let i=0;i<250;i++) {
-        q=(lo+hi)/2;
-        const c = q===0 ? P/n : P*q*Math.pow(1+q,n)/(Math.pow(1+q,n)-1);
-        if (c<pmt) lo=q; else hi=q;
+      if (isNaN(P)||isNaN(n)||isNaN(pmt)) { showError('Укажите тело кредита, количество кварталов и платёж'); return; }
+      if (P <= 0 || n <= 0 || pmt <= 0) { showError('Значения должны быть больше нуля'); return; }
+      let lo = 0, hi = 10, q = 0;
+      for (let i = 0; i < 250; i++) {
+        q = (lo + hi) / 2;
+        const c = q === 0 ? P/n : P*q*Math.pow(1+q,n)/(Math.pow(1+q,n)-1);
+        if (c < pmt) lo = q; else hi = q;
       }
-      result = q*4*100;
+      result = q * 4 * 100;
       document.getElementById('rate').value = result.toFixed(4);
-      calcQ=q; calcP=P; calcN=n; calcPmt=pmt;
+      calcQ = q; calcP = P; calcN = n; calcPmt = pmt;
     }
 
     twa?.HapticFeedback?.notificationOccurred('success');
-    displayResult(target, result, calcP, calcN,
-      calcQ ?? effectiveQuarterlyRate(parseFloat(document.getElementById('rate').value)||0, comp),
-      calcPmt
-    );
-  } catch(e) { showError('Ошибка расчёта. Проверьте данные.'); }
+
+    const q = calcQ ?? effectiveQuarterlyRate(parseFloat(document.getElementById('rate').value) || 0, comp);
+    displayResult(target, result, calcP, calcN, q, calcPmt);
+
+  } catch (e) {
+    showError('Ошибка расчёта. Проверьте введённые данные.');
+  }
 }
 
-const LABELS = { payment:'Квартальный платёж', amount:'Тело кредита', quarters:'Количество кварталов', rate:'Годовая ставка' };
+const LABELS = {
+  payment:  'Квартальный платёж',
+  amount:   'Тело кредита',
+  quarters: 'Количество кварталов',
+  rate:     'Годовая ставка'
+};
+
+const COMP_LABELS = {
+  daily: 'ежедневно', monthly: 'ежемесячно', quarterly: 'ежеквартально',
+  semiannual: 'раз в полгода', annual: 'ежегодно'
+};
 
 function displayResult(target, result, P, n, q, pmt) {
   document.getElementById('resultLabel').textContent = LABELS[target];
+
   if (target === 'quarters') {
     document.getElementById('resultPrefix').textContent = '';
     document.getElementById('resultValue').textContent  = result + ' кв.';
@@ -728,7 +747,7 @@ function displayResult(target, result, P, n, q, pmt) {
     document.getElementById('resultValue').textContent  = result.toFixed(4) + ' %';
   } else {
     document.getElementById('resultPrefix').textContent = 'THB ';
-    document.getElementById('resultValue').textContent  = fmtFull(result);
+    document.getElementById('resultValue').textContent  = fmtNum(result);
   }
 
   const total    = pmt * n;
@@ -737,11 +756,8 @@ function displayResult(target, result, P, n, q, pmt) {
   document.getElementById('statInterest').textContent = fmtCompact(interest);
   document.getElementById('statPrincipal').textContent= fmtCompact(P);
 
-  // Save state for FX & send
   lastResult = {
-    label:        LABELS[target],
-    resultTarget: target,
-    resultValue:  result,
+    target, result,
     paymentTHB:   pmt,
     totalTHB:     total,
     interestTHB:  interest,
@@ -752,45 +768,45 @@ function displayResult(target, result, P, n, q, pmt) {
   };
 
   document.getElementById('resultSection').classList.add('visible');
-
-  // FX section: set loading, show, fetch
   document.getElementById('fxSection').classList.add('visible');
+  document.getElementById('scheduleSection').classList.add('visible');
+  document.getElementById('btnCopy').classList.add('visible');
+
+  // Reset copy button state
+  resetCopyBtn();
+
+  // FX
   if (!fxRates) {
     ['RUB','USD','EUR'].forEach(c => {
-      const el = document.getElementById('fx'+c);
-      el.textContent = '···';
-      el.className = 'fx-amount loading';
-      document.getElementById('fx'+c+'rate').textContent = '';
+      const el = document.getElementById('fx' + c);
+      el.textContent = '···'; el.className = 'fx-amount loading';
+      document.getElementById('fx' + c + 'rate').textContent = '';
     });
     fetchRates();
   } else {
     updateFX();
   }
 
-  document.getElementById('scheduleSection').classList.add('visible');
   buildSchedule(P, n, q, pmt);
 
-  // Show send button
-  document.getElementById('btnSend').classList.add('visible');
-
-  setTimeout(() => document.getElementById('resultSection').scrollIntoView({behavior:'smooth',block:'nearest'}), 80);
+  setTimeout(() => document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
 }
 
-// ── Schedule ──
+// ── Amortization ──
 function buildSchedule(P, n, q, pmt) {
   const tbody = document.getElementById('amortBody');
   tbody.innerHTML = '';
   let balance = P;
-  const rows = Math.min(Math.ceil(n), 200);
-  for (let i=1; i<=rows; i++) {
+  const rows  = Math.min(Math.ceil(n), 200);
+  for (let i = 1; i <= rows; i++) {
     const interest  = balance * q;
     let   principal = pmt - interest;
-    if (i===rows) principal = balance;
+    if (i === rows) principal = balance;
     balance = Math.max(0, balance - principal);
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${i}</td>
-      <td style="color:var(--gold-light)">${fmtCompact(interest+principal)}</td>
+      <td style="color:var(--gold-light)">${fmtCompact(interest + principal)}</td>
       <td style="color:var(--danger)">${fmtCompact(interest)}</td>
       <td style="color:var(--success)">${fmtCompact(principal)}</td>
       <td>${fmtCompact(balance)}</td>
@@ -809,98 +825,110 @@ function toggleSchedule() {
   twa?.HapticFeedback?.impactOccurred('light');
 }
 
-// ── Send to chat ──
+// ── Copy result ──
 function buildSummaryText() {
   if (!lastResult) return '';
   const r = lastResult;
-  const COMP_LABELS = { daily:'ежедневно', monthly:'ежемесячно', quarterly:'ежеквартально', semiannual:'раз в полгода', annual:'ежегодно' };
-
-  let lines = [
-    '💰 Кредитный расчёт (THB)',
+  const lines = [
+    'Кредитный расчёт (THB)',
     '─────────────────────',
-    `Квартальный платёж: ${fmtFull(r.paymentTHB)} THB`,
-    `Тело кредита:       ${fmtFull(r.principalTHB)} THB`,
-    `Кол-во кварталов:   ${r.quarters} (${(r.quarters/4).toFixed(1)} лет)`,
-    `Годовая ставка:     ${r.rate.toFixed(2)}% (${COMP_LABELS[r.comp]||r.comp})`,
+    'Квартальный платёж: ' + fmtNum(r.paymentTHB) + ' THB',
+    'Тело кредита:       ' + fmtNum(r.principalTHB) + ' THB',
+    'Кол-во кварталов:   ' + r.quarters + ' (' + (r.quarters / 4).toFixed(1) + ' лет)',
+    'Годовая ставка:     ' + r.rate.toFixed(2) + '% (' + (COMP_LABELS[r.comp] || r.comp) + ')',
     '─────────────────────',
-    `Итого выплат:   ${fmtFull(r.totalTHB)} THB`,
-    `Из них проценты: ${fmtFull(r.interestTHB)} THB`,
+    'Итого выплат:    ' + fmtNum(r.totalTHB) + ' THB',
+    'Из них проценты: ' + fmtNum(r.interestTHB) + ' THB',
   ];
-
   if (fxRates && !fxRates.error) {
     lines.push('─────────────────────');
     lines.push('Итого в других валютах:');
-    lines.push(`  RUB: ${fmtFX(r.totalTHB / fxRates.RUB, 'RUB')}`);
-    lines.push(`  USD: ${fmtFX(r.totalTHB / fxRates.USD, 'USD')}`);
-    lines.push(`  EUR: ${fmtFX(r.totalTHB / fxRates.EUR, 'EUR')}`);
+    lines.push('  RUB: ' + fmtFX(r.totalTHB / fxRates.RUB, 'RUB'));
+    lines.push('  USD: ' + fmtFX(r.totalTHB / fxRates.USD, 'USD'));
+    lines.push('  EUR: ' + fmtFX(r.totalTHB / fxRates.EUR, 'EUR'));
   }
-
   return lines.join('\n');
 }
 
-let sendTimer;
-function sendToChat() {
+let copyTimer;
+function copyResult() {
   if (!lastResult) return;
   const text = buildSummaryText();
 
-  // Try Telegram sendData (works when app opened via keyboard button)
-  if (twa?.sendData) {
-    try {
-      twa.sendData(text);
-      twa?.HapticFeedback?.notificationOccurred('success');
-      return;
-    } catch(e) { /* fallback */ }
+  // Самый надёжный метод для WebView — textarea + execCommand
+  function doCopy() {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    // iOS Safari
+    const range = document.createRange();
+    range.selectNodeContents(ta);
+    const sel = window.getSelection();
+    sel?.removeAllRanges();
+    sel?.addRange(range);
+    ta.setSelectionRange(0, 99999);
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    return ok;
   }
 
-  // Fallback: copy to clipboard
-  const success = () => {
+  function onSuccess() {
     twa?.HapticFeedback?.notificationOccurred('success');
-    const t = document.getElementById('sendToast');
-    t.textContent = 'Скопировано — вставьте в чат';
-    t.classList.add('visible');
-    clearTimeout(sendTimer);
-    sendTimer = setTimeout(() => t.classList.remove('visible'), 2800);
-  };
+    const btn   = document.getElementById('btnCopy');
+    const label = document.getElementById('copyLabel');
+    const icon  = document.getElementById('copyIcon');
+    btn.classList.add('copied');
+    label.textContent = 'Скопировано';
+    icon.innerHTML    = '<path d="M20 6L9 17l-5-5"/>';  // checkmark
+    clearTimeout(copyTimer);
+    copyTimer = setTimeout(resetCopyBtn, 2500);
+  }
 
-  if (navigator.clipboard?.writeText) {
-    navigator.clipboard.writeText(text).then(success).catch(() => fallbackCopy(text, success));
+  // Пробуем современный Clipboard API, при отказе — execCommand
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text)
+      .then(onSuccess)
+      .catch(() => { if (doCopy()) onSuccess(); });
   } else {
-    fallbackCopy(text, success);
+    if (doCopy()) onSuccess();
   }
 }
 
-function fallbackCopy(text, cb) {
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
-  document.body.appendChild(ta);
-  ta.focus(); ta.select();
-  try { document.execCommand('copy'); cb(); } catch(e) {}
-  document.body.removeChild(ta);
+function resetCopyBtn() {
+  const btn   = document.getElementById('btnCopy');
+  const label = document.getElementById('copyLabel');
+  const icon  = document.getElementById('copyIcon');
+  btn.classList.remove('copied');
+  label.textContent = 'Скопировать расчёт';
+  icon.innerHTML    = '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>';
 }
 
 // ── Clear ──
 function clearAll() {
   ['loanAmount','quarters','rate','payment'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('resultSection').classList.remove('visible');
-  document.getElementById('fxSection').classList.remove('visible');
-  document.getElementById('scheduleSection').classList.remove('visible');
-  document.getElementById('btnSend').classList.remove('visible');
+  ['resultSection','fxSection','scheduleSection'].forEach(id => document.getElementById(id).classList.remove('visible'));
+  document.getElementById('btnCopy').classList.remove('visible');
   schedOpen = false;
   document.getElementById('schedTableWrap').classList.remove('open');
   document.getElementById('schedChevron').classList.remove('open');
   lastResult = null;
+  resetCopyBtn();
   hideError();
   twa?.HapticFeedback?.impactOccurred('medium');
 }
 
-// ── Keyboard ──
+// ── Enter key ──
 document.querySelectorAll('input').forEach(inp => {
-  inp.addEventListener('keydown', e => { if (e.key==='Enter') { inp.blur(); autoSolve(); } });
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { inp.blur(); autoSolve(); } });
 });
 
-// Pre-fetch rates in background after load
-setTimeout(fetchRates, 800);
+// Prefetch rates quietly
+setTimeout(fetchRates, 600);
 </script>
 </body>
 </html>
